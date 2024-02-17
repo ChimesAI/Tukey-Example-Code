@@ -8,16 +8,21 @@ using System.Diagnostics;
 //  .NET version: 6.0+
 //  C# version: 10
 
-// Ensure you replace all <...> with your parameters
+// Ensure you replace all <please enter your ...> with your parameters
 namespace TukeyApi
 {
     public class Program
     {
-        const string TukeyAddress = "https://<domain>/tukey/tukey/api/";
+        const string TukeyAddress = "https://<please enter your domain>/tukey/tukey/api/";
         static readonly CancellationTokenSource s_cts = new CancellationTokenSource();
-		
+        
         static List<Dictionary<string, string>> ConvertCsvToJson (string filePath)
         {
+            if (!File.Exists(filePath))
+            {
+                throw new InvalidOperationException("File Not Exist");
+                
+            }
             string[] lines = File.ReadAllLines(filePath);
             if (lines.Length == 0)
             {
@@ -40,7 +45,7 @@ namespace TukeyApi
         }
 
         // Start Prediction
-        static async Task<string> ApiPost (HttpClient httpClient, string ApiToken, CancellationToken token, string filePath)
+        static async Task<string> ApiPost (HttpClient httpClient, string ApiToken, CancellationToken token, String filePath)
         {
 
             List<Dictionary<string, string>> CsvContent = ConvertCsvToJson(filePath);
@@ -72,7 +77,6 @@ namespace TukeyApi
         // Get Prediction Result 
         static async Task ApiGet (HttpClient httpClient, string ApiToken, CancellationToken token)
         {
-            await Task.Delay(3000);
             string status = "";
             while (status != "success")
             {
@@ -113,19 +117,23 @@ namespace TukeyApi
                 // Task would be canceld after 30 minutes
                 s_cts.CancelAfter(1000 * 60 * 30);
                 HttpClient httpClient = new() { BaseAddress = new Uri(TukeyAddress) };
-				string filePath = @"<please enter your csv path>";
-                string apitoken = @"<your api token>";
+                string filePath = @"<please enter your csv path>";
+                string apitoken = @"<please enter your api_token>";
                 string result_id = await ApiPost(httpClient, apitoken, s_cts.Token, filePath);
-				
                 await ApiGet(httpClient, result_id, s_cts.Token);
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("predict failed: request exceed time_limit");
             }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             finally
             {
                 s_cts.Dispose();
+                Console.ReadKey();
             }
         }
 
