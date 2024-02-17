@@ -39,7 +39,7 @@ main <- function() {
     status <- result_json$data$status
     if (status == "success") {
       # status is success, the "predicted_data" is ready
-      return(result_json)
+      return(result_json$data)
       break
     } else if (status == "fail") {
       # status is fail, please check your data or call for support
