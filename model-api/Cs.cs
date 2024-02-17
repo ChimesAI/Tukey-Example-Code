@@ -45,7 +45,7 @@ namespace TukeyApi
         }
 
         // Start Prediction
-        static async Task<string> ApiPost (HttpClient httpClient, string ApiToken, CancellationToken token, String filePath)
+        static async Task<string> ApiPost (HttpClient httpClient, string ApiToken, CancellationToken token, string filePath)
         {
 
             List<Dictionary<string, string>> CsvContent = ConvertCsvToJson(filePath);
