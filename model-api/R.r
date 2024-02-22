@@ -1,3 +1,6 @@
+# R version: higher than R 4.2.2
+# dependencies: httr, jsonlite, readr
+
 library(httr)
 library(jsonlite)
 library(readr)
