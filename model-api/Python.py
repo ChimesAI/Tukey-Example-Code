@@ -31,7 +31,7 @@ def main():
     time_limit = 60 * 30
     time_start = time.time()
     while True:
-				current_time = time.time()
+        current_time = time.time()
         if current_time - time_start >= time_limit:
             raise Exception("predict failed: request exceed time_limit")
 
